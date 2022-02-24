@@ -1,7 +1,14 @@
 // Note: createStore and candyReducer must be exported for the tests to run
 
-export function createStore() {
-  // write your createStore code here
+export function createStore(reducer) {
+  let state
+  function dispatch(action){
+    state = reducer(state, action)
+  }
+  function getState(){
+    return state
+  }
+  return{getState, dispatch}
 }
 
 export function candyReducer(state = [], action) {
@@ -14,6 +21,8 @@ export function candyReducer(state = [], action) {
 }
 
 function render() {
+  let store = createStore(candyReducer)
+  store.dispatch({type: "@@INIT"})
   let container = document.getElementById("container");
   if (store.getState()) {
     container.textContent = store.getState().join(" ");
